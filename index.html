@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kanban Mercado - Turma GH-900</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <span class="logo">🛒</span>
+      <h1>Kanban do Mercado</h1>
+    </div>
+    <div class="header-right">
+      <button id="addColumnBtn" class="btn btn-secondary">+ Coluna</button>
+      <button id="themeToggle" class="btn btn-icon" aria-label="Alternar tema" title="Alternar tema claro/escuro">
+        <span id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="board" class="board"></main>
+
+  <template id="columnTemplate">
+    <section class="column" draggable="false">
+      <header class="column-header">
+        <input class="column-title" type="text" value="Coluna">
+        <div class="column-actions">
+          <span class="card-count">0</span>
+          <button class="btn-icon-sm delete-column" title="Excluir coluna">✕</button>
+        </div>
+      </header>
+      <div class="card-list" data-dropzone></div>
+      <button class="btn btn-add-card">+ Adicionar cartão</button>
+    </section>
+  </template>
+
+  <template id="cardTemplate">
+    <article class="card" draggable="true">
+      <div class="card-body">
+        <p class="card-title" contenteditable="true"></p>
+        <div class="card-meta">
+          <select class="card-priority">
+            <option value="baixa">🟢 Baixa</option>
+            <option value="media">🟡 Média</option>
+            <option value="alta">🔴 Alta</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-icon-sm delete-card" title="Excluir cartão">✕</button>
+    </article>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
