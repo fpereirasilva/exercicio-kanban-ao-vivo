@@ -1,0 +1,7 @@
+gh900serverlab.eastus2.cloudapp.azure.com {
+    reverse_proxy web:80
+}
+
+:80 {
+    reverse_proxy web:80
+}

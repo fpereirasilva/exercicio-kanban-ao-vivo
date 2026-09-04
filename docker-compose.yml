@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  proxy:
+    image: caddy:2.7.6-alpine
+    container_name: kanban_proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./proxy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: kanban_web
+    restart: always
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kanban_backend
+    restart: always
+    environment:
+      - AZURE_STORAGE_CONNECTION_STRING=${AZURE_STORAGE_CONNECTION_STRING}
+      - AZURE_CONTAINER_DATA=kanbandata
+      - AZURE_CONTAINER_IMAGES=kanbanimages
+
+volumes:
+  caddy_data:
+  caddy_config:

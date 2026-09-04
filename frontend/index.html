@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanban Mercado Cloud - GH-900 Azure MVP</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <span class="logo">🛒</span>
+      <div>
+        <h1>Kanban Mercado Cloud <span class="badge-azure">Azure GH-900</span></h1>
+        <p class="subtitle">Persistência em Azure Blob Storage & Containers Docker</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div id="apiStatus" class="api-status" title="Status da API Azure">
+        <span class="status-dot offline"></span>
+        <span id="statusText">Conectando...</span>
+      </div>
+      <button id="openAdminsBtn" class="btn btn-primary">👥 Administradores API</button>
+      <button id="saveBoardBtn" class="btn btn-success">☁️ Salvar no Azure</button>
+      <button id="addColumnBtn" class="btn btn-secondary">+ Coluna</button>
+      <button id="themeToggle" class="btn btn-icon" aria-label="Alternar tema" title="Alternar tema claro/escuro">
+        <span id="themeIcon">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="board" class="board"></main>
+
+  <!-- Modal Administradores API -->
+  <div id="adminModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>👥 Gestão de Administradores (API /api/v1/admins)</h2>
+        <button id="closeAdminModal" class="btn-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="addAdminForm" class="admin-form">
+          <h3>Cadastrar Novo Administrador</h3>
+          <div class="form-row">
+            <input type="text" id="adminNome" placeholder="Nome completo" required>
+            <input type="email" id="adminEmail" placeholder="E-mail" required>
+            <input type="text" id="adminCargo" placeholder="Cargo (Ex: DevOps / Gerente)" value="Administrador">
+            <button type="submit" class="btn btn-primary">+ Cadastrar via API</button>
+          </div>
+        </form>
+
+        <h3>Lista de Administradores Registrados</h3>
+        <div class="table-container">
+          <table id="adminsTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Cargo</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="adminsTableBody">
+              <tr><td colspan="6" class="text-center">Carregando administradores...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Upload de Imagem -->
+  <div id="imageModal" class="modal-overlay hidden">
+    <div class="modal-content modal-sm">
+      <div class="modal-header">
+        <h2>📷 Anexar Imagem no Azure Blob Storage</h2>
+        <button id="closeImageModal" class="btn-close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>A imagem será enviada para o container <code>kanbanimages</code> no Azure Blob Storage.</p>
+        <label for="imageInput" class="form-label">Selecione uma imagem:</label>
+        <input type="file" id="imageInput" accept="image/*" aria-label="Selecione uma imagem">
+        <div id="imagePreviewContainer" class="preview-container hidden">
+          <img id="imagePreview" src="" alt="Preview">
+        </div>
+        <button id="uploadImageBtn" class="btn btn-primary full-width">Enviar para Azure Blob Storage</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Templates -->
+  <template id="columnTemplate">
+    <section class="column">
+      <header class="column-header">
+        <input class="column-title" type="text" value="Coluna">
+        <div class="column-actions">
+          <span class="card-count">0</span>
+          <button class="btn-icon-sm delete-column" title="Excluir coluna">✕</button>
+        </div>
+      </header>
+      <div class="card-list" data-dropzone></div>
+      <button class="btn btn-add-card">+ Adicionar cartão</button>
+    </section>
+  </template>
+
+  <template id="cardTemplate">
+    <article class="card" draggable="true">
+      <div class="card-body">
+        <div class="card-image-wrapper hidden">
+          <img class="card-img" src="" alt="Imagem do cartão">
+        </div>
+        <p class="card-title" contenteditable="true"></p>
+        <div class="card-meta">
+          <select class="card-priority">
+            <option value="baixa">🟢 Baixa</option>
+            <option value="media">🟡 Média</option>
+            <option value="alta">🔴 Alta</option>
+          </select>
+          <button class="btn-icon-sm attach-image-btn" title="Anexar Imagem Azure">📷</button>
+        </div>
+      </div>
+      <button class="btn-icon-sm delete-card" title="Excluir cartão">✕</button>
+    </article>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
